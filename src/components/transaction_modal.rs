@@ -1,11 +1,11 @@
 use dioxus::prelude::*;
 
 #[component]
-pub fn ExpenseModal() -> Element {
+pub fn TransactionModal() -> Element {
     rsx! {
         div {
             h1 {
-                "Hello Expense Tracker!"
+                "Hello Transaction Tracker!"
             }
         }
     }

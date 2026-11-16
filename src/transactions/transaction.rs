@@ -1,18 +1,16 @@
-#[path = "expense_categories.rs"]
-mod expense_category;
-use expense_category::*;
+use super::transaction_categories::TransactionCategory;
 use chrono::prelude::*;
 use uuid::Uuid;
 
-pub struct Expense {
+pub struct Transaction {
     pub id: Uuid,
     pub name: String,
     pub amount: i32,
-    pub category: ExpenseCategory,
+    pub category: TransactionCategory,
     pub date: NaiveDate,
     pub time: NaiveTime
-} impl Expense {
-    pub fn new(name: String, amount: i32, category: ExpenseCategory) -> Self {
+} impl Transaction {
+    pub fn new(name: String, amount: i32, category: TransactionCategory) -> Self {
         let now: DateTime<Local> = Local::now();
         Self {
             id: Uuid::new_v4(),
