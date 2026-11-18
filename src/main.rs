@@ -4,13 +4,13 @@ use dioxus_icons::lucide::{BadgeDollarSign, Menu, Plus};
 mod components;
 use components::transaction_modal::TransactionModal;
 
+mod db;
+use db::storage::Storage;
+
 mod transactions;
-use transactions::transaction::Transaction;
-use transactions::transaction_categories::TransactionCategory;
 use transactions::transaction_manager::TransactionManager;
 
-mod db;
-use db::storage;
+use crate::transactions::{transaction::Transaction, transaction_categories::TransactionCategory};
 
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
@@ -20,8 +20,21 @@ fn main() {
 
 #[component]
 fn App() -> Element {
-    let mut manager: TransactionManager = TransactionManager::new();
-    let _ = manager.add_transaction(Transaction::new("Test Transaction".to_string(), 50, TransactionCategory::Food)); 
+    let storage = Storage::new("data/transactions.json");
+    let mut manager = use_signal(|| {TransactionManager::new(storage).expect("Failed to load transactions")});
+    let display_modal = use_signal(|| false);
+
+    let mut add_transaction = move |(name, amount, category): (String, String, TransactionCategory)| {
+        let Ok(amount) = amount.parse::<i32>() else {
+            return;
+        };
+
+        let transaction = Transaction::new(name, amount, category);
+        if let Err(error) = manager.write().add_transaction(transaction) {
+            eprintln!("Failed to add transaction: {error}");
+        }
+    };
+
     rsx! {
         document::Link { rel: "stylesheet", href: TAILWIND_CSS }
         div {
@@ -29,9 +42,23 @@ fn App() -> Element {
             Header{name: "Dashboard".to_string()}
             div {
                 class: "flex flex-1",
-                h1{"Hi"}
+                for transaction in manager.read().transactions().iter() {
+                    SampleTransactionDisplay {
+                        name: transaction.name.clone(),
+                        amount: transaction.amount.to_string(),
+                        category: format!("{:?}", transaction.category)
+                    }
+                }
             }
-            Footer {}
+            Footer {
+                display_modal
+            }
+        }
+        if display_modal() {
+            TransactionModal {
+                add_transaction: move |data| add_transaction(data),
+                display_modal
+            }
         }
     }
 }
@@ -57,7 +84,7 @@ fn Header(name: String) -> Element {
     }
 }
 #[component]
-fn Footer() -> Element {
+fn Footer(display_modal: Signal<bool>) -> Element {
     rsx! {
         div {
             class: "p-4 flex flex-row justify-between items-center",
@@ -67,7 +94,27 @@ fn Footer() -> Element {
             }
             button {
                 class: "p-2 rounded-3xl border border-gray-200",
+                onclick: move |_| {
+                    display_modal.set(true);
+                },
                 Plus{}
+            }
+        }
+    }
+}
+
+#[component]
+fn SampleTransactionDisplay(name: String, amount: String, category: String) -> Element {
+    rsx! {
+        div {
+            h1 {
+                "{name}"
+            }
+            h1 {
+                "{amount}"
+            }
+            h1 {
+                "{category}"
             }
         }
     }

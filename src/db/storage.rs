@@ -1,13 +1,15 @@
-use std::{error::Error, fs};
-use std::path::PathBuf;
+use std::{error::Error, fs, path::PathBuf};
 
 use crate::transactions::transaction::Transaction;
 
 pub struct Storage {
     transactions_path: PathBuf,
 } impl Storage {
-    pub fn new(transactions_path: PathBuf) -> Self {
-        Self { transactions_path }
+    pub fn new(path: impl Into<PathBuf>) -> Self {
+        let path = path.into();
+        println!("Working directory: {:?}", std::env::current_dir());
+        println!("Storage file path: {:?}", path);
+        Self { transactions_path: path }
     }
     pub fn load_transactions(&self) -> Result<Vec<Transaction>, Box<dyn Error>> {
         if !self.transactions_path.exists() {
@@ -24,6 +26,8 @@ pub struct Storage {
         }
         let json = serde_json::to_string_pretty(transactions)?;
         fs::write(&self.transactions_path, json)?;
+        println!("Successfully saved to: {:?}", self.transactions_path);
+        println!("Saved {} transactions", transactions.len());
         Ok(())
     }
 }
