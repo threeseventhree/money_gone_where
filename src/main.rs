@@ -9,6 +9,9 @@ use transactions::transaction::Transaction;
 use transactions::transaction_categories::TransactionCategory;
 use transactions::transaction_manager::TransactionManager;
 
+mod db;
+use db::storage;
+
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
