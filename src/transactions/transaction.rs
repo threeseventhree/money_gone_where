@@ -1,7 +1,9 @@
 use super::transaction_categories::TransactionCategory;
 use chrono::prelude::*;
 use uuid::Uuid;
+use serde::{Serialize, Deserialize};
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Transaction {
     pub id: Uuid,
     pub name: String,

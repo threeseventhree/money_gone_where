@@ -11,6 +11,9 @@ pub struct TransactionManager {
             transactions: Vec::new()
         }
     }
+    pub fn transactions(&self) -> &[Transaction] {
+        &self.transactions
+    } // view-only transactions
     pub fn add_transaction(&mut self, transaction: Transaction) -> Result<(), Box<dyn Error>> {
         self.transactions.push(transaction);
         Ok(())
@@ -25,5 +28,11 @@ pub struct TransactionManager {
             },
             None => Err("Transaction not found".into())
         }
+    }
+    pub fn remove_transaction(&mut self, id: Uuid) -> Result<(), Box<dyn Error>> {
+        let init_length = self.transactions().len();
+        self.transactions.retain(|transaction| transaction.id != id);
+        if self.transactions.len() == init_length { return Err("Transaction not found".into()); }
+        Ok(())
     }
 }
