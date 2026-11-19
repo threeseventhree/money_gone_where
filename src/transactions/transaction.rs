@@ -3,7 +3,7 @@ use chrono::prelude::*;
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Transaction {
     pub id: Uuid,
     pub name: String,

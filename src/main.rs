@@ -3,14 +3,16 @@ use dioxus_icons::lucide::{BadgeDollarSign, Menu, Plus};
 
 mod components;
 use components::transaction_modal::TransactionModal;
+use components::recent_transactions_widget::RecentTransactionsWidget;
+use components::transaction_calendar_widget::TransactionCalendarWiddget;
 
 mod db;
 use db::storage::Storage;
 
 mod transactions;
 use transactions::transaction_manager::TransactionManager;
-
-use crate::transactions::{transaction::Transaction, transaction_categories::TransactionCategory};
+use transactions::transaction::Transaction;
+use transactions::transaction_categories::TransactionCategory;
 
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
@@ -38,17 +40,12 @@ fn App() -> Element {
     rsx! {
         document::Link { rel: "stylesheet", href: TAILWIND_CSS }
         div {
-            class: "flex flex-col min-h-screen divide-y",
+            class: "flex flex-col min-h-screen w-full divide-y divide-gray-200",
             Header{name: "Dashboard".to_string()}
             div {
-                class: "flex flex-1",
-                for transaction in manager.read().transactions().iter() {
-                    SampleTransactionDisplay {
-                        name: transaction.name.clone(),
-                        amount: transaction.amount.to_string(),
-                        category: format!("{:?}", transaction.category)
-                    }
-                }
+                class: "flex flex-col flex-1",
+                TransactionCalendarWiddget {}
+                RecentTransactionsWidget{}
             }
             Footer {
                 display_modal
