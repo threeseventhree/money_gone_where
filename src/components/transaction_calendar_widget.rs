@@ -4,7 +4,6 @@ use chrono::{Datelike, Local, Duration};
 #[component]
 pub fn TransactionCalendarWiddget() -> Element {
     let today = Local::now().date_naive();
-
     let year = today.year();
     let month = today.month();
     let month_names = [

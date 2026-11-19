@@ -26,6 +26,8 @@ fn App() -> Element {
     let mut manager = use_signal(|| {TransactionManager::new(storage).expect("Failed to load transactions")});
     let display_modal = use_signal(|| false);
 
+    let transactions = manager.read().transactions().to_vec();
+
     let mut add_transaction = move |(name, amount, category): (String, String, TransactionCategory)| {
         let Ok(amount) = amount.parse::<i32>() else {
             return;
@@ -45,7 +47,9 @@ fn App() -> Element {
             div {
                 class: "flex flex-col flex-1",
                 TransactionCalendarWiddget {}
-                RecentTransactionsWidget{}
+                RecentTransactionsWidget{
+                    transactions
+                }
             }
             Footer {
                 display_modal

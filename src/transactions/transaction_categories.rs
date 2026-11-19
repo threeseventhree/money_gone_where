@@ -22,4 +22,15 @@ pub enum TransactionCategory {
             _ => None,
         }
     }
+    pub fn as_string(value: TransactionCategory) -> String {
+        match value {
+            TransactionCategory::Food => "Food".to_string(),
+            TransactionCategory::Groceries => "Groceries".to_string(),
+            TransactionCategory::Bills => "Bills".to_string(),
+            TransactionCategory::Entertainment => "Entertainment".to_string(),
+            TransactionCategory::Education => "Education".to_string(),
+            TransactionCategory::Coffee => "Coffee".to_string(),
+            TransactionCategory::Cigarettes => "Cigarettes".to_string(),
+        }
+    }
 }
