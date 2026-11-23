@@ -4,7 +4,7 @@ use dioxus_icons::lucide::{X};
 use crate::transactions::transaction_categories::TransactionCategory;
 
 #[component]
-pub fn TransactionModal(add_transaction: EventHandler<(String, String, TransactionCategory)>, display_modal: Signal<bool>) -> Element {
+pub fn TransactionModal(add_transaction: EventHandler<(String, String, TransactionCategory)>, display_transaction_modal: Signal<bool>) -> Element {
     let mut name = use_signal(String::new);
     let mut amount = use_signal(String::new);
     let mut category = use_signal(|| TransactionCategory::Food);
@@ -17,7 +17,7 @@ pub fn TransactionModal(add_transaction: EventHandler<(String, String, Transacti
             amount().trim().to_string(),
             category()
         ));
-        display_modal.set(false);
+        display_transaction_modal.set(false);
     };
     rsx! {
         div {
@@ -40,7 +40,7 @@ pub fn TransactionModal(add_transaction: EventHandler<(String, String, Transacti
                     button {
                         class: "p-2 border border-gray-200 rounded-xl hover:bg-gray-100 transition-all duration-300 cursor-pointer",
                         onclick: move |_| {
-                            display_modal.set(false);
+                            display_transaction_modal.set(false);
                         },
                         X {size:20}
                     }

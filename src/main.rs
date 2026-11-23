@@ -1,10 +1,12 @@
 use dioxus::prelude::*;
-use dioxus_icons::lucide::{BadgeDollarSign, Menu, Plus};
 
 mod components;
 use components::transaction_modal::TransactionModal;
 use components::recent_transactions_widget::RecentTransactionsWidget;
 use components::transaction_calendar_widget::TransactionCalendarWiddget;
+use components::header::Header;
+use components::footer::Footer;
+use components::menu_modal::MenuModal;
 
 mod db;
 use db::storage::Storage;
@@ -22,9 +24,13 @@ fn main() {
 
 #[component]
 fn App() -> Element {
+    let pages = vec!["Dashboard".to_string(), "Transaction List".to_string(), "Summaries".to_string(), "Settings".to_string()];
+
     let storage = Storage::new("data/transactions.json");
     let mut manager = use_signal(|| {TransactionManager::new(storage).expect("Failed to load transactions")});
-    let display_modal = use_signal(|| false);
+    let display_transaction_modal = use_signal(|| false);
+    let display_menu_modal = use_signal(|| false);
+    let current_page = use_signal(|| "Dashboard".to_string());
 
     let transactions = manager.read().transactions().to_vec();
 
@@ -43,7 +49,9 @@ fn App() -> Element {
         document::Link { rel: "stylesheet", href: TAILWIND_CSS }
         div {
             class: "flex flex-col min-h-screen w-full divide-y divide-gray-200",
-            Header{name: "Dashboard".to_string()}
+            Header{
+                display_menu_modal
+            }
             div {
                 class: "flex flex-col flex-1",
                 TransactionCalendarWiddget {}
@@ -52,71 +60,22 @@ fn App() -> Element {
                 }
             }
             Footer {
-                display_modal
+                display_transaction_modal
             }
         }
-        if display_modal() {
+        if display_transaction_modal() {
             TransactionModal {
                 add_transaction: move |data| add_transaction(data),
-                display_modal
+                display_transaction_modal
+            }
+        }
+        if display_menu_modal() {
+            MenuModal {
+                display_menu_modal,
+                pages,
+                current_page
             }
         }
     }
 }
 
-#[component]
-fn Header(name: String) -> Element {
-    rsx! {
-        div {
-            class: "p-4 flex flex-row justify-between items-center ",
-            div {
-                class: "flex flex-row gap-2 items-center",
-                BadgeDollarSign {size: 24}
-                h1 {
-                    class: "font-bold text-xl mb-1",
-                    "{name}"
-                }
-            }
-            button {
-                class: "p-2 rounded-3xl border border-gray-200",
-                Menu{}
-            }
-        }
-    }
-}
-#[component]
-fn Footer(display_modal: Signal<bool>) -> Element {
-    rsx! {
-        div {
-            class: "p-4 flex flex-row justify-between items-center",
-            h1 {
-                class: "text-xl font-bold mb-1",
-                "373's transactions"
-            }
-            button {
-                class: "p-2 rounded-3xl border border-gray-200",
-                onclick: move |_| {
-                    display_modal.set(true);
-                },
-                Plus{}
-            }
-        }
-    }
-}
-
-#[component]
-fn SampleTransactionDisplay(name: String, amount: String, category: String) -> Element {
-    rsx! {
-        div {
-            h1 {
-                "{name}"
-            }
-            h1 {
-                "{amount}"
-            }
-            h1 {
-                "{category}"
-            }
-        }
-    }
-}
