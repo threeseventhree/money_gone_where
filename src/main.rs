@@ -2,10 +2,6 @@ use dioxus::prelude::*;
 
 mod components;
 use components::transaction_modal::TransactionModal;
-use components::recent_transactions_widget::RecentTransactionsWidget;
-use components::transaction_calendar_widget::TransactionCalendarWiddget;
-use components::header::Header;
-use components::footer::Footer;
 use components::menu_modal::MenuModal;
 
 mod db;
@@ -15,6 +11,9 @@ mod transactions;
 use transactions::transaction_manager::TransactionManager;
 use transactions::transaction::Transaction;
 use transactions::transaction_categories::TransactionCategory;
+
+mod pages;
+use pages::dashboard::DashboardPage;
 
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
@@ -47,21 +46,11 @@ fn App() -> Element {
 
     rsx! {
         document::Link { rel: "stylesheet", href: TAILWIND_CSS }
-        div {
-            class: "flex flex-col min-h-screen w-full divide-y divide-gray-200",
-            Header{
-                display_menu_modal
-            }
-            div {
-                class: "flex flex-col flex-1",
-                TransactionCalendarWiddget {}
-                RecentTransactionsWidget{
-                    transactions
-                }
-            }
-            Footer {
-                display_transaction_modal
-            }
+        DisplayPages {
+            current_page,
+            display_menu_modal,
+            transactions,
+            display_transaction_modal
         }
         if display_transaction_modal() {
             TransactionModal {
@@ -79,3 +68,23 @@ fn App() -> Element {
     }
 }
 
+#[component]
+fn DisplayPages(current_page: Signal<String>, display_menu_modal: Signal<bool>, transactions: Vec<Transaction>, display_transaction_modal: Signal<bool>) -> Element {
+    match current_page().as_str() {
+    "Dashboard" => rsx! {
+        DashboardPage {display_menu_modal, transactions, display_transaction_modal}
+    },
+    "Transaction List" => rsx! {
+        div { "Transaction List" }
+    },
+    "Summaries" => rsx! {
+        div { "Summaries" }
+    },
+    "Settings" => rsx! {
+        div { "Settings" }
+    },
+    _ => rsx! {
+        div { "Page not found" }
+    }
+}
+}

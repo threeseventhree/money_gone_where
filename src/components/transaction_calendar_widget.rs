@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 use chrono::{Datelike, Local, Duration};
 
 #[component]
-pub fn TransactionCalendarWiddget() -> Element {
+pub fn TransactionCalendarWidget() -> Element {
     let today = Local::now().date_naive();
     let year = today.year();
     let month = today.month();
