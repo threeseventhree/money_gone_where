@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+
 mod components;
 use components::transaction_modal::TransactionModal;
 use components::menu_modal::MenuModal;
@@ -14,6 +15,7 @@ use transactions::transaction_categories::TransactionCategory;
 
 mod pages;
 use pages::dashboard::DashboardPage;
+use pages::transactionlist::TransactionListPage;
 
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
@@ -75,7 +77,11 @@ fn DisplayPages(current_page: Signal<String>, display_menu_modal: Signal<bool>, 
         DashboardPage {display_menu_modal, transactions, display_transaction_modal}
     },
     "Transaction List" => rsx! {
-        div { "Transaction List" }
+        TransactionListPage {
+            display_menu_modal, 
+            transactions, 
+            display_transaction_modal
+        }
     },
     "Summaries" => rsx! {
         div { "Summaries" }
@@ -88,3 +94,4 @@ fn DisplayPages(current_page: Signal<String>, display_menu_modal: Signal<bool>, 
     }
 }
 }
+
