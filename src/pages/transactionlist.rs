@@ -62,7 +62,7 @@ fn TransactionList(transactions: Vec<Transaction>) -> Element {
                         TransactionItem {
                             name: Some(transaction.name.clone()),
                             amount: Some(transaction.amount),
-                            category: Some(TransactionCategory::as_string(transaction.category)),
+                            category: Some(transaction.category.to_string()),
                             date: Some(transaction.date.to_string())
                         }
                     }

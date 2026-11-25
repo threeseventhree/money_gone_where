@@ -9,7 +9,6 @@ pub fn TransactionItem(name: Option<String>, amount: Option<i32>, category: Opti
                 class: "flex flex-col gap-1",
                 h1 {
                     class: "text-xl font-bold",
-
                     if let Some(name) = name {
                         "{name}"
                     } else {
@@ -26,7 +25,6 @@ pub fn TransactionItem(name: Option<String>, amount: Option<i32>, category: Opti
                             class: "text-sm text-gray-500",
                             "{date}"
                         }
-
                         p {
                             class: "text-sm text-gray-500",
                             "• {amount} MDL"

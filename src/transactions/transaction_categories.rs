@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -22,15 +24,17 @@ pub enum TransactionCategory {
             _ => None,
         }
     }
-    pub fn as_string(value: TransactionCategory) -> String {
-        match value {
-            TransactionCategory::Food => "Food".to_string(),
-            TransactionCategory::Groceries => "Groceries".to_string(),
-            TransactionCategory::Bills => "Bills".to_string(),
-            TransactionCategory::Entertainment => "Entertainment".to_string(),
-            TransactionCategory::Education => "Education".to_string(),
-            TransactionCategory::Coffee => "Coffee".to_string(),
-            TransactionCategory::Cigarettes => "Cigarettes".to_string(),
+} impl Display for TransactionCategory {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            TransactionCategory::Food => write!(f, "Food"),
+            TransactionCategory::Groceries => write!(f, "Groceries"),
+            TransactionCategory::Bills => write!(f, "Bills"),
+            TransactionCategory::Entertainment => write!(f, "Entertainment"),
+            TransactionCategory::Education => write!(f, "Education"),
+            TransactionCategory::Coffee => write!(f, "Coffee"),
+            TransactionCategory::Cigarettes => write!(f, "Cigarettes"),
         }
+        
     }
 }

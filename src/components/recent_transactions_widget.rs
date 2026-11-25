@@ -11,7 +11,6 @@ pub fn RecentTransactionsWidget(transactions: Vec<Transaction>) -> Element {
     latest.sort_by_key(|t| Reverse((t.date, t.time)));
     latest.truncate(3);
     let empty_slots = 3 - latest.len();
-
     rsx! {
         div {
             class: "p-4 flex flex-col gap-2 border border-gray-200 rounded-2xl m-4",
@@ -27,7 +26,7 @@ pub fn RecentTransactionsWidget(transactions: Vec<Transaction>) -> Element {
                     TransactionItem {
                         name: Some(transaction.name.clone()),
                         amount: Some(transaction.amount),
-                        category: Some(TransactionCategory::as_string(transaction.category)),
+                        category: Some(transaction.category.to_string()),
                         date: Some(transaction.date.format("%d-%m-%y").to_string())
                     }
                 }
@@ -40,7 +39,6 @@ pub fn RecentTransactionsWidget(transactions: Vec<Transaction>) -> Element {
                     }
                 }
             }
-            
         }
     }
 } 
