@@ -1,9 +1,11 @@
+use std::cmp::Reverse;
+
 use dioxus::prelude::*;
 use chrono::{NaiveDate, Duration};
 use dioxus_icons::lucide::{ArrowLeft, ArrowRight};
 
 use crate::components::{header::Header, transaction_item::TransactionItem, footer::Footer};
-use crate::transactions::{transaction::Transaction, transaction_categories::TransactionCategory};
+use crate::transactions::{transaction::Transaction};
 
 #[component]
 pub fn TransactionListPage(display_menu_modal: Signal<bool>, display_transaction_modal: Signal<bool>, transactions: Vec<Transaction>) -> Element {
@@ -25,12 +27,12 @@ pub fn TransactionListPage(display_menu_modal: Signal<bool>, display_transaction
 #[component]
 fn TransactionList(transactions: Vec<Transaction>) -> Element {
     let selected_date = use_signal(|| chrono::Local::now().date_naive());
-    let filtered_transactions: Vec<Transaction> = transactions
+    let mut filtered_transactions: Vec<Transaction> = transactions
     .iter()
     .filter(|transaction| transaction.date == selected_date())
     .cloned()
     .collect();
-
+    filtered_transactions.sort_by_key(|t| Reverse((t.date, t.time)));
     rsx! {
         div {
             class: "m-2 p-4 rounded-xl border border-gray-200 flex flex-col flex-1 min-h-0 gap-4",
@@ -44,7 +46,6 @@ fn TransactionList(transactions: Vec<Transaction>) -> Element {
                     selected_date
                 }
             }
-            hr {class: "border-gray-200"}
             if filtered_transactions.is_empty() {
                 div {
                     class: "flex-1 flex items-center justify-center",
@@ -63,7 +64,7 @@ fn TransactionList(transactions: Vec<Transaction>) -> Element {
                             name: Some(transaction.name.clone()),
                             amount: Some(transaction.amount),
                             category: Some(transaction.category.to_string()),
-                            date: Some(transaction.date.to_string())
+                            date: Some(transaction.date.format("%d-%m-%y").to_string())
                         }
                     }
                 }

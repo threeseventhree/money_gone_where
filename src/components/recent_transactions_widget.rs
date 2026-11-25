@@ -3,8 +3,6 @@ use std::cmp::Reverse;
 
 use crate::components::transaction_item::TransactionItem;
 use crate::transactions::transaction::Transaction;
-use crate::transactions::transaction_categories::TransactionCategory;
-
 #[component]
 pub fn RecentTransactionsWidget(transactions: Vec<Transaction>) -> Element {
     let mut latest: Vec<&Transaction> = transactions.iter().collect();

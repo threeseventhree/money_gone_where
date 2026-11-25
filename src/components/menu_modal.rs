@@ -9,7 +9,6 @@ pub fn MenuModal(display_menu_modal: Signal<bool>, pages: Vec<String>, current_p
             div {
                 class: "w-full h-full bg-white flex flex-col",
                 Header {display_menu_modal}
-                hr {class: "border-gray-200"}
                 for page in pages.iter() {
                     MenuButton {
                         name: page.clone(),

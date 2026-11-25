@@ -16,6 +16,7 @@ use transactions::transaction_categories::TransactionCategory;
 mod pages;
 use pages::dashboard::DashboardPage;
 use pages::transactionlist::TransactionListPage;
+use pages::summaries::SummariesPage;
 
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
@@ -70,6 +71,8 @@ fn App() -> Element {
     }
 }
 
+
+
 #[component]
 fn DisplayPages(current_page: Signal<String>, display_menu_modal: Signal<bool>, transactions: Vec<Transaction>, display_transaction_modal: Signal<bool>) -> Element {
     match current_page().as_str() {
@@ -84,7 +87,11 @@ fn DisplayPages(current_page: Signal<String>, display_menu_modal: Signal<bool>, 
         }
     },
     "Summaries" => rsx! {
-        div { "Summaries" }
+        SummariesPage {
+            display_menu_modal,
+            display_transaction_modal,
+            transactions
+        }
     },
     "Settings" => rsx! {
         div { "Settings" }
