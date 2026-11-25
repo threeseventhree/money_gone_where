@@ -71,34 +71,32 @@ fn App() -> Element {
     }
 }
 
-
-
 #[component]
 fn DisplayPages(current_page: Signal<String>, display_menu_modal: Signal<bool>, transactions: Vec<Transaction>, display_transaction_modal: Signal<bool>) -> Element {
     match current_page().as_str() {
-    "Dashboard" => rsx! {
-        DashboardPage {display_menu_modal, transactions, display_transaction_modal}
-    },
-    "Transaction List" => rsx! {
-        TransactionListPage {
-            display_menu_modal, 
-            transactions, 
-            display_transaction_modal
+        "Dashboard" => rsx! {
+            DashboardPage {display_menu_modal, transactions, display_transaction_modal}
+        },
+        "Transaction List" => rsx! {
+            TransactionListPage {
+                display_menu_modal, 
+                transactions, 
+                display_transaction_modal
+            }
+        },
+        "Summaries" => rsx! {
+            SummariesPage {
+                display_menu_modal,
+                display_transaction_modal,
+                transactions
+            }
+        },
+        "Settings" => rsx! {
+            div { "Settings" }
+        },
+        _ => rsx! {
+            div { "Page not found" }
         }
-    },
-    "Summaries" => rsx! {
-        SummariesPage {
-            display_menu_modal,
-            display_transaction_modal,
-            transactions
-        }
-    },
-    "Settings" => rsx! {
-        div { "Settings" }
-    },
-    _ => rsx! {
-        div { "Page not found" }
     }
-}
 }
 
