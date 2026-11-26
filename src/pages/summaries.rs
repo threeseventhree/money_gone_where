@@ -41,8 +41,8 @@ pub fn SummariesPage(display_menu_modal: Signal<bool>, display_transaction_modal
                 div {
                     class: "flex items-center justify-between",
                     h1 {
-                        class: "font-bold text-2xl",
-                        "Spending Summary"
+                        class: "font-bold text-2xl mb-2",
+                        "Summary"
                     }
                     MonthSelector {
                         selected_month

@@ -1,25 +1,18 @@
 use dioxus::prelude::*;
 
-
 mod components;
-use components::transaction_modal::TransactionModal;
-use components::menu_modal::MenuModal;
+use components::{transaction_modal::TransactionModal, menu_modal::MenuModal};
 
 mod db;
 use db::storage::Storage;
 
 mod transactions;
-use transactions::transaction_manager::TransactionManager;
-use transactions::transaction::Transaction;
-use transactions::transaction_categories::TransactionCategory;
+use transactions::{transaction_manager::TransactionManager, transaction::Transaction, transaction_categories::TransactionCategory};
 
 mod pages;
-use pages::dashboard::DashboardPage;
-use pages::transactionlist::TransactionListPage;
-use pages::summaries::SummariesPage;
+use pages::{dashboard::DashboardPage, transactionlist::TransactionListPage, summaries::SummariesPage, settings::SettingsPage};
 
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
-
 fn main() {
     dioxus::launch(App);
 }
@@ -92,7 +85,9 @@ fn DisplayPages(current_page: Signal<String>, display_menu_modal: Signal<bool>, 
             }
         },
         "Settings" => rsx! {
-            div { "Settings" }
+            SettingsPage {
+                display_menu_modal
+            }
         },
         _ => rsx! {
             div { "Page not found" }
